@@ -1,7 +1,11 @@
 package com.clody.springboot.coursmc.models;
 
-import java.io.Serializable; 
-import java.util.Date; 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType; 
 import javax.persistence.Entity;
@@ -10,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn; 
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne; 
 @Entity
 public class Invoice implements Serializable {
@@ -30,6 +35,9 @@ public class Invoice implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "delivery_address_id")
 	private Address deliveryAddress;
+	
+	@OneToMany(mappedBy="id.invoice")
+	private Set<ItemInvoice> itemInvoices = new HashSet<>();
 
 	public Invoice() {}
 
@@ -40,12 +48,27 @@ public class Invoice implements Serializable {
 		this.deliveryAddress = deliveryAddress;
 	}
 
+	public List<Product> getProducts() {
+		List<Product> listProducts = new ArrayList<>();
+		for (ItemInvoice itemInvoice : itemInvoices) {
+			listProducts.add(itemInvoice.getProduct());
+		}
+		return listProducts;
+	}
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+ 
+	public Set<ItemInvoice> getItemInvoices() {
+		return itemInvoices;
+	}
+
+	public void setItemInvoices(Set<ItemInvoice> itemInvoices) {
+		this.itemInvoices = itemInvoices;
 	}
 
 	public Date getInstant() {

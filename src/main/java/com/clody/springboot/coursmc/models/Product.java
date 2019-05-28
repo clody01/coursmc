@@ -2,7 +2,9 @@ package com.clody.springboot.coursmc.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -18,67 +21,77 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 public class Product implements Serializable {
 
-	@Id 
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
 	private Double price;
-	
-	@JsonBackReference // permit to ignore categories field for each Product Breaking the cyclic reference 
+
+	@JsonBackReference // permit to ignore categories field for each Product Breaking the cyclic
+						// reference
 	@ManyToMany
-	@JoinTable(name="product_category",
-	joinColumns = @JoinColumn(name="product_id"),
-	inverseJoinColumns = @JoinColumn(name="category_id"))
+	@JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<Category> categories = new ArrayList<>();
-	
-	public Product() {	
+
+	@OneToMany(mappedBy="id.product")
+	private Set<ItemInvoice> itemInvoices = new HashSet<>();
+
+	public Product() {
 	}
-	
+
 	public Product(Integer id, String name, Double price) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 	}
 
+	public List<Invoice> getInvoices() {
+		List<Invoice> listInvoices = new ArrayList<>();
+		for (ItemInvoice itemInvoice : itemInvoices) {
+			listInvoices.add(itemInvoice.getInvoice());
+		}
+		return listInvoices;
+	}
+
 	public Integer getId() {
 		return id;
 	}
-
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
+	public Set<ItemInvoice> getItemInvoices() {
+		return itemInvoices;
+	}
+
+	public void setItemInvoices(Set<ItemInvoice> itemInvoices) {
+		this.itemInvoices = itemInvoices;
+	}
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public Double getPrice() {
 		return price;
 	}
 
-
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-
 
 	public List<Category> getCategories() {
 		return categories;
 	}
 
-
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -87,7 +100,6 @@ public class Product implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -105,7 +117,6 @@ public class Product implements Serializable {
 			return false;
 		return true;
 	}
-
 
 	private static final long serialVersionUID = 1L;
 }

@@ -13,6 +13,7 @@ import com.clody.springboot.coursmc.daos.ICategoryDao;
 import com.clody.springboot.coursmc.daos.ICityDao;
 import com.clody.springboot.coursmc.daos.ICustomerDao;
 import com.clody.springboot.coursmc.daos.IInvoiceDao;
+import com.clody.springboot.coursmc.daos.IItemInvoiceDao;
 import com.clody.springboot.coursmc.daos.IPaymentDao;
 import com.clody.springboot.coursmc.daos.IProductDao;
 import com.clody.springboot.coursmc.daos.IStateDao;
@@ -21,6 +22,7 @@ import com.clody.springboot.coursmc.models.Category;
 import com.clody.springboot.coursmc.models.City;
 import com.clody.springboot.coursmc.models.Customer;
 import com.clody.springboot.coursmc.models.Invoice;
+import com.clody.springboot.coursmc.models.ItemInvoice;
 import com.clody.springboot.coursmc.models.Payment;
 import com.clody.springboot.coursmc.models.PaymentWithCard;
 import com.clody.springboot.coursmc.models.PaymentWithTicket;
@@ -53,6 +55,10 @@ public class CoursmcApplication implements CommandLineRunner {
 
 	@Autowired
 	private IPaymentDao paymentDao;
+	
+	@Autowired
+	private IItemInvoiceDao itemInvoiceDao;
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoursmcApplication.class, args);
@@ -115,6 +121,16 @@ public class CoursmcApplication implements CommandLineRunner {
 		invoiceDao.saveAll(Arrays.asList(invoice1, invoice2));
 		paymentDao.saveAll(Arrays.asList(paymentWithCard, paymentWithTicket));
 		
+		ItemInvoice itemInvoice1 = new ItemInvoice(invoice1, prod1, 0.00, 1, 2000.00);
+		ItemInvoice itemInvoice2 = new ItemInvoice(invoice1, prod3, 0.00, 2, 80.00);
+		ItemInvoice itemInvoice3 = new ItemInvoice(invoice2, prod2, 100.00, 1, 800.00);
+		invoice1.getItemInvoices().addAll(Arrays.asList(itemInvoice1, itemInvoice2));
+		invoice1.getItemInvoices().addAll(Arrays.asList(itemInvoice3));
+		prod1.getItemInvoices().addAll(Arrays.asList(itemInvoice1));
+		prod2.getItemInvoices().addAll(Arrays.asList(itemInvoice3));
+		prod3.getItemInvoices().addAll(Arrays.asList(itemInvoice2));
+	
+		itemInvoiceDao.saveAll(Arrays.asList(itemInvoice1, itemInvoice2, itemInvoice3));
 	}
 
 }

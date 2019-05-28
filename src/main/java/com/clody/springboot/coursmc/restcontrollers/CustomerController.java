@@ -15,28 +15,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.clody.springboot.coursmc.models.Category;
-import com.clody.springboot.coursmc.services.ICategoryService;
+import com.clody.springboot.coursmc.models.Customer;
+import com.clody.springboot.coursmc.services.ICustomerService;
 
 @RestController
-@RequestMapping("/categories")
-public class CategoryController {
+@RequestMapping("/customers")
+public class CustomerController {
 	
 	@Autowired
-	private ICategoryService categoryService;
+	private ICustomerService customerService; 
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Map<String, Object> response = new HashMap<>();
-		Category category = null;
+		Customer customer = null;
 		try {
-			category = categoryService.findById(id);
+			customer = customerService.findById(id);
 		} catch (DataAccessException e) {
 			response.put("message", "Base consultation error");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Category>(category, HttpStatus.OK);
+		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 		
 	}
 	

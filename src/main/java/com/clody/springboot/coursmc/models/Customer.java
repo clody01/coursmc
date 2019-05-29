@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.clody.springboot.coursmc.models.enums.CustomerType;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Customer implements Serializable {
@@ -30,17 +29,19 @@ public class Customer implements Serializable {
 	private Integer customerType;
 	private String cpfOuCnpj;
 	
-	@JsonManagedReference
+ 
 	@OneToMany(mappedBy="customer")
-	private List<Address> address = new ArrayList<>();
+	private List<Address> addressList = new ArrayList<>();
 	
 	@ElementCollection
 	@CollectionTable(name="telephones")
 	private Set<String> telephones = new HashSet<>();
 	
-	@OneToMany(mappedBy="customer")
-	private List<Invoice> invoices= new ArrayList<>();
 	
+	  @JsonIgnore
+	  @OneToMany(mappedBy="customer") 
+	  private List<Invoice> invoices= new ArrayList<>();
+	 
 	public Customer() {	
 	}
 	public Customer(Integer id, String name, String email, CustomerType customerType, String cpfOuCnpj) {
@@ -82,10 +83,10 @@ public class Customer implements Serializable {
 	}
 	
 	public List<Address> getAddressList() {
-		return address;
+		return addressList;
 	}
 	public void setAddressList(List<Address> addressList) {
-		this.address = addressList;
+		this.addressList = addressList;
 	}
 	public void setCustomerType(Integer customerType) {
 		this.customerType = customerType;
@@ -96,19 +97,23 @@ public class Customer implements Serializable {
 	public void setTelephones(Set<String> telephones) {
 		this.telephones = telephones;
 	}
-	
-	public List<Invoice> getOrders() {
-		return invoices;
-	}
-	public void setOrders(List<Invoice> invoices) {
-		this.invoices = invoices;
-	}
+
+	/*
+	 * public List<Invoice> getInvoices() { return invoices; } public void
+	 * setInvoices(List<Invoice> invoices) { this.invoices = invoices; }
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
+	}
+	public List<Invoice> getInvoices() {
+		return invoices;
+	}
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
 	}
 	@Override
 	public boolean equals(Object obj) {

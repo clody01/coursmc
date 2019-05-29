@@ -1,6 +1,7 @@
 package com.clody.springboot.coursmc.models;
 
 import javax.persistence.Entity;
+
 import com.clody.springboot.coursmc.models.enums.StatusPayment;
 
 @Entity

@@ -1,21 +1,21 @@
 package com.clody.springboot.coursmc.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType; 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn; 
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne; 
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonFormat; 
 @Entity
 public class Invoice implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,11 +23,14 @@ public class Invoice implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instant;
 	
+	 
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "invoice")
 	private Payment payment;
 	
+	 
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
@@ -48,13 +51,7 @@ public class Invoice implements Serializable {
 		this.deliveryAddress = deliveryAddress;
 	}
 
-	public List<Product> getProducts() {
-		List<Product> listProducts = new ArrayList<>();
-		for (ItemInvoice itemInvoice : itemInvoices) {
-			listProducts.add(itemInvoice.getProduct());
-		}
-		return listProducts;
-	}
+	
 	public Integer getId() {
 		return id;
 	}

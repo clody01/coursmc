@@ -1,43 +1,40 @@
 package com.clody.springboot.coursmc.models;
 
-import java.io.Serializable; 
-import java.util.Date; 
+import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn; 
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne; 
+
+import com.fasterxml.jackson.annotation.JsonIgnore; 
 @Entity
-public class ItemInvoice implements Serializable {
+public class ItemInvoice  implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@JsonIgnore
 	@EmbeddedId
 	private ItemInvoicePK id = new ItemInvoicePK();
 	
 	private Double discount;
 	private Integer count;
 	private Double price;
+	
 	public ItemInvoice() {}
 	public ItemInvoice(Invoice invoice, Product product, Double discount, Integer count, Double price) {
-		super();
-		id.setProduct(product);
-		id.setInvoice(invoice);
+		this.id.setProduct(product);
+		this.id.setInvoice(invoice);
 		this.discount = discount;
 		this.count = count;
 		this.price = price;
 	}
-	
+
 	public Product getProduct() {
 		return id.getProduct();
 	}
+	@JsonIgnore
 	public Invoice getInvoice() {
 		return id.getInvoice();
 	}
+	 
 	public ItemInvoicePK getId() {
 		return id;
 	}

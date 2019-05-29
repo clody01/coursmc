@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 
  
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
  
 @Entity
 public class Address implements Serializable{	
@@ -26,7 +27,7 @@ public class Address implements Serializable{
 	private String neighborhood;
 	private String zipCode;
 	
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="customer_id")
 	private Customer customer;

@@ -11,6 +11,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.clody.springboot.coursmc.models.enums.StatusPayment;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -20,8 +21,10 @@ public abstract class Payment implements Serializable {
 	@Id
 	private Integer id;
 	private Integer status;
+	
+	@JsonIgnore
 	@OneToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "invoice_id")
 	@MapsId // To set the same invoiceId to Payment(payment_id)
 	private Invoice invoice;
 
@@ -50,11 +53,11 @@ public abstract class Payment implements Serializable {
 		this.status = status.getCode();
 	}
 
-	public Invoice getOrder() {
+	public Invoice getInvoice() {
 		return  invoice;
 	}
 
-	public void setOrder(Invoice invoice) {
+	public void setInvoice(Invoice invoice) {
 		this.invoice = invoice;
 	}
 

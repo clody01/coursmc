@@ -117,7 +117,7 @@ public class CoursmcApplication implements CommandLineRunner {
 				simpleDateFormat.parse("20/10/2017 00:00"), null);
 		invoice2.setPayment(paymentWithTicket);
 
-		customer1.getOrders().addAll(Arrays.asList(invoice1, invoice2));
+		customer1.getInvoices().addAll(Arrays.asList(invoice1, invoice2));
 		invoiceDao.saveAll(Arrays.asList(invoice1, invoice2));
 		paymentDao.saveAll(Arrays.asList(paymentWithCard, paymentWithTicket));
 		

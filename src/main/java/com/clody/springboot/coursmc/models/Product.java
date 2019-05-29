@@ -14,9 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Product implements Serializable {
@@ -27,12 +26,14 @@ public class Product implements Serializable {
 	private String name;
 	private Double price;
 
-	@JsonBackReference // permit to ignore categories field for each Product Breaking the cyclic
-						// reference
+	// permit to ignore categories field for each Product Breaking the cyclic
+	// reference
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<Category> categories = new ArrayList<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy="id.product")
 	private Set<ItemInvoice> itemInvoices = new HashSet<>();
 
@@ -45,6 +46,7 @@ public class Product implements Serializable {
 		this.price = price;
 	}
 
+	@JsonIgnore // tout ce qui est comme fonction 'get' sera automatiquement serialiser raison pour laquelle on ignore aussi
 	public List<Invoice> getInvoices() {
 		List<Invoice> listInvoices = new ArrayList<>();
 		for (ItemInvoice itemInvoice : itemInvoices) {

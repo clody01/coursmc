@@ -32,4 +32,11 @@ public class CategoryServiceImpl implements ICategoryService {
 		return categoryDao.save(category);
 	}
 
+	@Override
+	@Transactional
+	public Category update(Category category) {
+		findById(category.getId());
+		return categoryDao.save(category);
+	}
+
 }

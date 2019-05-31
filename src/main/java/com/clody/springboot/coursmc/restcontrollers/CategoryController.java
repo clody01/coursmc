@@ -2,7 +2,9 @@ package com.clody.springboot.coursmc.restcontrollers;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.clody.springboot.coursmc.models.Category;
+import com.clody.springboot.coursmc.models.dto.CategoryDto;
 import com.clody.springboot.coursmc.services.ICategoryService;
 
 @RestController
@@ -41,6 +44,14 @@ public class CategoryController {
 		}
 		return new ResponseEntity<Category>(category, HttpStatus.OK);
 
+	}
+
+	@GetMapping("/categories")
+	public ResponseEntity<List<CategoryDto>> findAll() {
+		List<Category> categories = categoryService.findAll();
+		List<CategoryDto> categoriesDto = categories.stream()
+				.map(category -> new CategoryDto(category)).collect(Collectors.toList());
+		return  ResponseEntity.ok().body(categoriesDto);
 	}
 
 	@PostMapping("/categories")

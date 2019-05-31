@@ -1,5 +1,7 @@
 package com.clody.springboot.coursmc.services.impls;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,12 @@ public class CategoryServiceImpl implements ICategoryService {
 			throw new DataIntegrityException("This Category has some Products");
 		}
 		
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Category> findAll() {		 
+		return categoryDao.findAll();
 	}
 
 }

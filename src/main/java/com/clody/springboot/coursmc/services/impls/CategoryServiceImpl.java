@@ -1,13 +1,14 @@
 package com.clody.springboot.coursmc.services.impls;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.clody.springboot.coursmc.daos.ICategoryDao;
 import com.clody.springboot.coursmc.models.Category;
 import com.clody.springboot.coursmc.services.ICategoryService;
+import com.clody.springboot.coursmc.services.excepetions.DataIntegrityException;
 import com.clody.springboot.coursmc.services.excepetions.ObjectNotFoundException;
 
 @Service
@@ -37,6 +38,17 @@ public class CategoryServiceImpl implements ICategoryService {
 	public Category update(Category category) {
 		findById(category.getId());
 		return categoryDao.save(category);
+	}
+
+	@Override
+	public void delete(Integer id) {
+		findById(id);
+		try {
+			categoryDao.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("This Category has some Products");
+		}
+		
 	}
 
 }

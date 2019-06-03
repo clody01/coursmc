@@ -30,7 +30,6 @@ import com.clody.springboot.coursmc.models.Product;
 import com.clody.springboot.coursmc.models.State;
 import com.clody.springboot.coursmc.models.enums.CustomerType;
 import com.clody.springboot.coursmc.models.enums.StatusPayment;
-import com.clody.springboot.coursmc.services.ICategoryService;
 
 @SpringBootApplication
 public class CoursmcApplication implements CommandLineRunner {
@@ -55,10 +54,9 @@ public class CoursmcApplication implements CommandLineRunner {
 
 	@Autowired
 	private IPaymentDao paymentDao;
-	
+
 	@Autowired
 	private IItemInvoiceDao itemInvoiceDao;
-	
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoursmcApplication.class, args);
@@ -69,6 +67,14 @@ public class CoursmcApplication implements CommandLineRunner {
 
 		Category cat1 = new Category(null, "Informatique");
 		Category cat2 = new Category(null, "Electronic");
+		Category cat3 = new Category(null, "Informatique");
+		Category cat4 = new Category(null, "Category 4");
+		Category cat5 = new Category(null, "Category 5");
+		Category cat6 = new Category(null, "Category 6");
+		Category cat7 = new Category(null, "Category 7");
+		Category cat8 = new Category(null, "Category 8");
+		Category cat9 = new Category(null, "Category 9");
+		Category cat10 = new Category(null, "Category 10");
 
 		Product prod1 = new Product(null, "Computer", 2000.00);
 		Product prod2 = new Product(null, "Print", 800.00);
@@ -100,7 +106,7 @@ public class CoursmcApplication implements CommandLineRunner {
 				"95100", customer1, city2);
 		customer1.getAddressList().addAll(Arrays.asList(address1, address2));
 
-		categoryDao.saveAll(Arrays.asList(cat1, cat2));
+		categoryDao.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10));
 		productDao.saveAll(Arrays.asList(prod1, prod2, prod3));
 		stateDao.saveAll(Arrays.asList(state1, state2));
 		cityDao.saveAll(Arrays.asList(city1, city2, city3));
@@ -120,7 +126,7 @@ public class CoursmcApplication implements CommandLineRunner {
 		customer1.getInvoices().addAll(Arrays.asList(invoice1, invoice2));
 		invoiceDao.saveAll(Arrays.asList(invoice1, invoice2));
 		paymentDao.saveAll(Arrays.asList(paymentWithCard, paymentWithTicket));
-		
+
 		ItemInvoice itemInvoice1 = new ItemInvoice(invoice1, prod1, 0.00, 1, 2000.00);
 		ItemInvoice itemInvoice2 = new ItemInvoice(invoice1, prod3, 0.00, 2, 80.00);
 		ItemInvoice itemInvoice3 = new ItemInvoice(invoice2, prod2, 100.00, 1, 800.00);
@@ -129,7 +135,7 @@ public class CoursmcApplication implements CommandLineRunner {
 		prod1.getItemInvoices().addAll(Arrays.asList(itemInvoice1));
 		prod2.getItemInvoices().addAll(Arrays.asList(itemInvoice3));
 		prod3.getItemInvoices().addAll(Arrays.asList(itemInvoice2));
-	
+
 		itemInvoiceDao.saveAll(Arrays.asList(itemInvoice1, itemInvoice2, itemInvoice3));
 	}
 

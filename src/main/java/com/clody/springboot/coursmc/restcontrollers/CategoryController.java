@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -54,6 +56,16 @@ public class CategoryController {
 		return  ResponseEntity.ok().body(categoriesDto);
 	}
 
+	@GetMapping("/categories/pages")
+	public ResponseEntity<Page<CategoryDto>> findPage(
+		@RequestParam(value="page", defaultValue = "0")Integer page, 
+		@RequestParam(value="linesPerPage", defaultValue = "24")Integer linesPerPage, 
+		@RequestParam(value="derection", defaultValue = "ASC")String derection, 
+		@RequestParam(value="orderBy", defaultValue = "name")String orderBy) {
+		Page<Category> categories = categoryService.findPage(page,linesPerPage,derection,orderBy);
+		Page<CategoryDto> categoriesDto = categories.map(category -> new CategoryDto(category));
+		return  ResponseEntity.ok().body(categoriesDto);
+	}
 	@PostMapping("/categories")
 	public ResponseEntity<Void> insert(@RequestBody Category category) {		
 		category = categoryService.insert(category);		

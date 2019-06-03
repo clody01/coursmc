@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +60,13 @@ public class CategoryServiceImpl implements ICategoryService {
 	@Transactional(readOnly = true)
 	public List<Category> findAll() {		 
 		return categoryDao.findAll();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Category> findPage(Integer page, Integer linesPerpage, String derection, String orderBy) {
+	PageRequest pageRequest = PageRequest.of(page, linesPerpage,Direction.valueOf(derection), orderBy);
+		return categoryDao.findAll(pageRequest);
 	}
 
 }

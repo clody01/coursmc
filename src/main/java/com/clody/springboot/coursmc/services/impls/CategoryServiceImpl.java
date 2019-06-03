@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clody.springboot.coursmc.daos.ICategoryDao;
 import com.clody.springboot.coursmc.models.Category;
+import com.clody.springboot.coursmc.models.dto.CategoryDto;
 import com.clody.springboot.coursmc.services.ICategoryService;
 import com.clody.springboot.coursmc.services.excepetions.DataIntegrityException;
 import com.clody.springboot.coursmc.services.excepetions.ObjectNotFoundException;
@@ -26,14 +27,15 @@ public class CategoryServiceImpl implements ICategoryService {
 	public Category findById(Integer id) {
 		Category category = categoryDao.findById(id).orElse(null);
 		if (category == null) {
-			throw new ObjectNotFoundException("Object with ID = "+ id.toString() + " Of Type "+ Category.class.getName()+ " does not exist in database!");
+			throw new ObjectNotFoundException("Object with ID = " + id.toString() + " Of Type "
+					+ Category.class.getName() + " does not exist in database!");
 		}
 		return category;
 	}
 
 	@Override
 	@Transactional
-	public Category insert(Category category) {	
+	public Category insert(Category category) {
 		category.setId(null);
 		return categoryDao.save(category);
 	}
@@ -53,20 +55,24 @@ public class CategoryServiceImpl implements ICategoryService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("This Category has some Products");
 		}
-		
+
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Category> findAll() {		 
+	public List<Category> findAll() {
 		return categoryDao.findAll();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Category> findPage(Integer page, Integer linesPerpage, String derection, String orderBy) {
-	PageRequest pageRequest = PageRequest.of(page, linesPerpage,Direction.valueOf(derection), orderBy);
+		PageRequest pageRequest = PageRequest.of(page, linesPerpage, Direction.valueOf(derection), orderBy);
 		return categoryDao.findAll(pageRequest);
 	}
 
+	@Override
+	public Category fromDto(CategoryDto categoryDto) {
+		return new Category(categoryDto.getId(), categoryDto.getName());
+	}
 }

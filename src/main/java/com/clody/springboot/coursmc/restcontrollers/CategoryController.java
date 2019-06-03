@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -67,15 +69,16 @@ public class CategoryController {
 		return  ResponseEntity.ok().body(categoriesDto);
 	}
 	@PostMapping("/categories")
-	public ResponseEntity<Void> insert(@RequestBody Category category) {		
-		category = categoryService.insert(category);		
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoryDto categoryDto) {		
+		Category category = categoryService.insert(categoryService.fromDto(categoryDto));		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
 
 	}
 	@PutMapping("/categories/{id}")
-	public ResponseEntity<Void> update(@RequestBody Category category, @PathVariable Integer id) {		
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer id) {		
+		Category category = categoryService.fromDto(categoryDto);
 		category.setId(id);
 		category = categoryService.update(category);			 
 		return ResponseEntity.noContent().build();

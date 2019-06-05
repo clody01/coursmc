@@ -9,7 +9,7 @@ public enum CustomerType {
 		this.code = code;
 		this.description = description;
 	}
-	public int getCod() {
+	public int getCode() {
 		return code;
 	}
 	
@@ -21,7 +21,7 @@ public enum CustomerType {
 			return null;
 		}
 		for (CustomerType x : CustomerType.values()) {
-			if (code.equals(x.getCod())) {
+			if (code.equals(x.getCode())) {
 				return x;
 			}
 		}

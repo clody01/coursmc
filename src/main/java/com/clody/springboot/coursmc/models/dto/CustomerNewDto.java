@@ -7,21 +7,33 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.clody.springboot.coursmc.models.Customer;
+import com.clody.springboot.coursmc.services.validations.CustomerInsert;
 
+@CustomerInsert
 public class CustomerNewDto implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@NotEmpty(message="Customer'sname is Requiered!")
+	@Length(min=5, max=120, message="the name must have 5 characters minimum and 120 characters maxi")
 	private String name;
+	
+	@NotEmpty(message="The Email is Requiered!")
+	@Email(message="Invalid email!")
 	private String email;
+	
+	
 	private Integer customerType;
+	@NotEmpty(message="The cpfOuCnpj is Requiered!")
 	private String cpfOuCnpj;
 
 	private String publicPlace;
+	@NotEmpty(message="The number is Requiered!")
 	private String number;
 	private String complement;
 	private String neighborhood;
+	@NotEmpty(message="The ZipCode is Requiered!")
 	private String zipCode;
-
+	@NotEmpty(message="The Phone number is Requiered!")
 	private String phone1;
 	private String phone2;
 	private String phone3;

@@ -65,13 +65,12 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 
 	@Override
-	@Transactional
 	public void delete(Integer id) {
 		findById(id);
 		try {
 			customerDao.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("This Customer has some Products");
+			throw new DataIntegrityException("This Customercan ot be delete because it has some Payments");
 		}
 
 	}

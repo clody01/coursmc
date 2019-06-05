@@ -8,7 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.clody.springboot.coursmc.daos.IAddressrDao;
+import com.clody.springboot.coursmc.daos.IAddressDao;
 import com.clody.springboot.coursmc.daos.ICategoryDao;
 import com.clody.springboot.coursmc.daos.ICityDao;
 import com.clody.springboot.coursmc.daos.ICustomerDao;
@@ -44,7 +44,7 @@ public class CoursmcApplication implements CommandLineRunner {
 	private ICityDao cityDao;
 
 	@Autowired
-	private IAddressrDao addressrDao;
+	private IAddressDao addressrDao;
 
 	@Autowired
 	private ICustomerDao customerDao;

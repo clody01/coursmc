@@ -26,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.clody.springboot.coursmc.models.Customer;
 import com.clody.springboot.coursmc.models.dto.CustomerDto;
+import com.clody.springboot.coursmc.models.dto.CustomerNewDto;
 import com.clody.springboot.coursmc.services.ICustomerService;
 
 @RestController
@@ -68,9 +69,19 @@ public class CustomerController {
 		Page<CustomerDto> customersDto = customers.map(customer -> new CustomerDto(customer));
 		return  ResponseEntity.ok().body(customersDto);
 	}
+
+	/*
+	 * @PostMapping("/customers") public ResponseEntity<Void>
+	 * insert(@Valid @RequestBody CustomerDto customerDto) { Customer customer =
+	 * customerService.insert(customerService.fromDto(customerDto)); URI uri =
+	 * ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand
+	 * (customer.getId()) .toUri(); return ResponseEntity.created(uri).build();
+	 * 
+	 * }
+	 */
 	@PostMapping("/customers")
-	public ResponseEntity<Void> insert(@Valid @RequestBody CustomerDto customerDto) {		
-		Customer customer = customerService.insert(customerService.fromDto(customerDto));		
+	public ResponseEntity<Void> insert(@Valid @RequestBody CustomerNewDto customerNewDto) {		
+		Customer customer = customerService.insert(customerService.fromNewDto(customerNewDto));		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(customer.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();

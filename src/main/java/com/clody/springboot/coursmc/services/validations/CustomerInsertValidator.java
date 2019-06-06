@@ -6,12 +6,19 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.clody.springboot.coursmc.daos.ICustomerDao;
+import com.clody.springboot.coursmc.models.Customer;
 import com.clody.springboot.coursmc.models.dto.CustomerNewDto;
 import com.clody.springboot.coursmc.models.enums.CustomerType;
 import com.clody.springboot.coursmc.restcontrollers.exceptions.FieldMessage;
 import com.clody.springboot.coursmc.services.validations.utils.BR;
 
 public class CustomerInsertValidator  implements ConstraintValidator<CustomerInsert, CustomerNewDto>{
+	@Autowired
+	private ICustomerDao customerDao;
+	
 	@Override
 	public void initialize(CustomerInsert ann) {
 		
@@ -26,6 +33,10 @@ public class CustomerInsertValidator  implements ConstraintValidator<CustomerIns
 		 if (customerNewDto.getCustomerType().equals(CustomerType.LEGALPERSON.getCode())
 				 && !BR.isValidCNPJ(customerNewDto.getCpfOuCnpj())) {
 			list.add(new FieldMessage("CpfOuCnpj","Invalid CNPJ"));
+		}
+		 Customer customer = customerDao.findByEmail(customerNewDto.getEmail());
+		if (customer != null) {
+			list.add(new FieldMessage("email","Email already exist!"));				
 		}
 		 for (FieldMessage fieldMessage : list) {
 			 context.disableDefaultConstraintViolation();

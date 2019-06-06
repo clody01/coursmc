@@ -8,7 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.clody.springboot.coursmc.models.Customer;
+import com.clody.springboot.coursmc.services.validations.CustomerUpdate;
 
+@CustomerUpdate
 public class CustomerDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

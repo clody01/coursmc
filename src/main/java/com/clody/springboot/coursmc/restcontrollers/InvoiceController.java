@@ -16,13 +16,13 @@ import com.clody.springboot.coursmc.models.Invoice;
 import com.clody.springboot.coursmc.services.IInvoiceService;
 
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping("/api")
 public class InvoiceController {
 	
 	@Autowired
 	private IInvoiceService invoiceService;
 	
-	@GetMapping("/{id}")
+	@GetMapping("/invoices/{id}")
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Map<String, Object> response = new HashMap<>();
 		Invoice invoice = null;

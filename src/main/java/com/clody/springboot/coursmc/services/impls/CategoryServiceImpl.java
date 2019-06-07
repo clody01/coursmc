@@ -72,8 +72,8 @@ public class CategoryServiceImpl implements ICategoryService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<Category> findPage(Integer page, Integer linesPerpage, String derection, String orderBy) {
-		PageRequest pageRequest = PageRequest.of(page, linesPerpage, Direction.valueOf(derection), orderBy);
+	public Page<Category> findPage(Integer page, Integer linesPerPage, String derection, String orderBy) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(derection), orderBy);
 		return categoryDao.findAll(pageRequest);
 	}
 

@@ -79,14 +79,35 @@ public class CoursmcApplication implements CommandLineRunner {
 		Product prod1 = new Product(null, "Computer", 2000.00);
 		Product prod2 = new Product(null, "Print", 800.00);
 		Product prod3 = new Product(null, "Mouse", 80.00);
-
+		Product prod4 = new Product(null, "Office desk", 300.00);
+		Product prod5 = new Product(null, "Towel", 50.00);
+		Product prod6 = new Product(null, "Quilt", 200.00);
+		Product prod7 = new Product(null, "TV true color", 1200.00);
+		Product prod8 = new Product(null, "Trimmer", 800.00);
+		Product prod9 = new Product(null, "Bedside lamp", 100.00);
+		Product prod10 = new Product(null, "Pending", 180.00);
+		Product prod11 = new Product(null, "Shampoo", 90.00);
+		
 		cat1.getProducts().addAll(Arrays.asList(prod1, prod2, prod3));
-		cat1.getProducts().addAll(Arrays.asList(prod2));
-
-		prod1.getCategories().addAll(Arrays.asList(cat1));
-		prod2.getCategories().addAll(Arrays.asList(cat1, cat2));
-		prod3.getCategories().addAll(Arrays.asList(cat1));
-
+		cat2.getProducts().addAll(Arrays.asList(prod2,prod4));
+		cat3.getProducts().addAll(Arrays.asList(prod5, prod6));
+		cat4.getProducts().addAll(Arrays.asList(prod1,prod2,prod3,prod7));
+		cat5.getProducts().addAll(Arrays.asList(prod8));
+		cat6.getProducts().addAll(Arrays.asList(prod9,prod10));
+		cat7.getProducts().addAll(Arrays.asList(prod11));
+		
+		prod1.getCategories().addAll(Arrays.asList(cat1,cat4));
+		prod2.getCategories().addAll(Arrays.asList(cat1, cat2, cat4));
+		prod3.getCategories().addAll(Arrays.asList(cat1, cat4));
+		prod4.getCategories().addAll(Arrays.asList(cat2));
+		prod5.getCategories().addAll(Arrays.asList(cat3));
+		prod6.getCategories().addAll(Arrays.asList(cat3));
+		prod7.getCategories().addAll(Arrays.asList(cat4));
+		prod8.getCategories().addAll(Arrays.asList(cat5));
+		prod9.getCategories().addAll(Arrays.asList(cat6));
+		prod10.getCategories().addAll(Arrays.asList(cat6));
+		prod11.getCategories().addAll(Arrays.asList(cat7));
+		
 		State state1 = new State(null, "Gbèkè");
 		State state2 = new State(null, "Marahoué");
 
@@ -106,8 +127,8 @@ public class CoursmcApplication implements CommandLineRunner {
 				"95100", customer1, city2);
 		customer1.getAddressList().addAll(Arrays.asList(address1, address2));
 
-		categoryDao.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10));
-		productDao.saveAll(Arrays.asList(prod1, prod2, prod3));
+		categoryDao.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
+		productDao.saveAll(Arrays.asList(prod1, prod2, prod3, prod4, prod5, prod6, prod7, prod8, prod9, prod10, prod11));
 		stateDao.saveAll(Arrays.asList(state1, state2));
 		cityDao.saveAll(Arrays.asList(city1, city2, city3));
 		customerDao.saveAll(Arrays.asList(customer1));

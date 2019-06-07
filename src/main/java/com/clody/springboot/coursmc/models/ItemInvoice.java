@@ -27,6 +27,10 @@ public class ItemInvoice  implements Serializable {
 		this.price = price;
 	}
 
+	public double getSubTotal() {
+		return (price - discount)* count;
+	}
+	
 	public Product getProduct() {
 		return id.getProduct();
 	}

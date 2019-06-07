@@ -51,6 +51,13 @@ public class Invoice implements Serializable {
 		this.deliveryAddress = deliveryAddress;
 	}
 
+	public double getTotalValue() {
+		double sum = 0.0;
+		for (ItemInvoice itemInvoice : itemInvoices) {
+			sum = sum + itemInvoice.getSubTotal();
+		}
+		return sum;
+	}
 	
 	public Integer getId() {
 		return id;

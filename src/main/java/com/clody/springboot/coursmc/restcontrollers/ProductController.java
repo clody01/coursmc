@@ -49,7 +49,7 @@ public class ProductController {
 		@RequestParam(value="linesPerPage", defaultValue = "24")Integer linesPerPage, 
 		@RequestParam(value="derection", defaultValue = "ASC")String derection, 
 		@RequestParam(value="orderBy", defaultValue = "name")String orderBy) {
-		List<Integer> ids = URL.decodeIntList(categories);
+		List<Integer> ids = URL.decodeIntList(categories);	
 		String decodedName = URL.decodeParam(name);
 		Page<Product> products = productService.search(decodedName,ids,page,linesPerPage,derection,orderBy);
 		Page<ProductDto> productsDto = products.map(product -> new ProductDto(product));

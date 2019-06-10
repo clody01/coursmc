@@ -34,9 +34,15 @@ public class ItemInvoice  implements Serializable {
 	public Product getProduct() {
 		return id.getProduct();
 	}
+	public void setProduct(Product product) {
+		id.setProduct(product);
+	}
 	@JsonIgnore
 	public Invoice getInvoice() {
 		return id.getInvoice();
+	}
+	public void setInvoice(Invoice invoice) {
+		id.setInvoice(invoice);
 	}
 	 
 	public ItemInvoicePK getId() {

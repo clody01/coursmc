@@ -3,8 +3,10 @@ package com.clody.springboot.coursmc.models;
 import javax.persistence.Entity;
 
 import com.clody.springboot.coursmc.models.enums.StatusPayment;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @Entity
+@JsonTypeName("paymentWithCard")
 public class PaymentWithCard extends Payment {
 	private static final long serialVersionUID = 1L;
 	

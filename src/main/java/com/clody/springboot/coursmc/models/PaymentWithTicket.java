@@ -6,9 +6,11 @@ import javax.persistence.Entity;
 
 import com.clody.springboot.coursmc.models.enums.StatusPayment;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @Entity
+@JsonTypeName("paymentWithTicket")
 public class PaymentWithTicket extends Payment{	
 	private static final long serialVersionUID = 1L; 
 	

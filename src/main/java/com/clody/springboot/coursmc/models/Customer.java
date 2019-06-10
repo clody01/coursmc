@@ -80,12 +80,10 @@ public class Customer implements Serializable {
 		this.email = email;
 	}
 
-	public CustomerType getCustomerType() {
-		return CustomerType.toEnum(customerType);
-	}
+	 
 
-	public void setCustomerType(CustomerType customerType) {
-		this.customerType = customerType.getCode();
+	public Integer getCustomerType() {
+		return customerType;
 	}
 
 	public String getCpfOuCnpj() {

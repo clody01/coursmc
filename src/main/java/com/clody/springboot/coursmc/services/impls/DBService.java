@@ -56,9 +56,6 @@ public class DBService {
 	@Autowired
 	private IItemInvoiceDao itemInvoiceDao;
 
-	 
- 
-
 	public void instantiateTestDatabease() throws ParseException {
 		Category cat1 = new Category(null, "Informatique");
 		Category cat2 = new Category(null, "Electronic");
@@ -67,9 +64,11 @@ public class DBService {
 		Category cat5 = new Category(null, "Category 5");
 		Category cat6 = new Category(null, "Category 6");
 		Category cat7 = new Category(null, "Category 7");
-		Category cat8 = new Category(null, "Category 8");
-		Category cat9 = new Category(null, "Category 9");
-		Category cat10 = new Category(null, "Category 10");
+		/*
+		 * Category cat8 = new Category(null, "Category 8"); Category cat9 = new
+		 * Category(null, "Category 9"); Category cat10 = new Category(null,
+		 * "Category 10");
+		 */
 
 		Product prod1 = new Product(null, "Computer", 2000.00);
 		Product prod2 = new Product(null, "Print", 800.00);

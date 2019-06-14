@@ -1,8 +1,11 @@
 package com.clody.springboot.coursmc.models;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -130,6 +133,28 @@ public class Invoice implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("fr", "FR"));
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		StringBuilder builder = new StringBuilder();
+		builder.append("Invoice number: ");
+		builder.append(id);
+		builder.append(", Instance: ");
+		builder.append(sdf.format(getInstant()));
+		builder.append(", Customer: ");
+		builder.append(getCustomer().getName());
+		builder.append(", Payment status: ");
+		builder.append(getPayment().getStatus().getDescription());
+		builder.append("\nDetails: \n:");
+		for (ItemInvoice itemInvoice : itemInvoices) {
+			builder.append(itemInvoice.toString());
+		}
+		builder.append("Total: ");
+		builder.append(nf.format(getTotalValue()));
+		return builder.toString();
 	}
 
 }

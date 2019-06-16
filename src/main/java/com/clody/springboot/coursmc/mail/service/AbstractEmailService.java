@@ -19,19 +19,21 @@ public class AbstractEmailService implements EmailService {
 		sendEmail(simpleMailMessage);
 	}
 
-	@Override
-	public void sendEmail(SimpleMailMessage msg) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	protected SimpleMailMessage prepareSimpleMailMessageFromInvoice(Invoice invoice) {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setTo(invoice.getCustomer().getEmail());
-		simpleMailMessage.setFrom(sender);
+		simpleMailMessage.setFrom("mamadoumady69@gmail.com");	
 		simpleMailMessage.setSubject("Invoice confirmation code: " + invoice.getId());
 		simpleMailMessage.setSentDate(new Date(System.currentTimeMillis()));
 		simpleMailMessage.setText(invoice.toString());
 		return simpleMailMessage;
+	}
+
+
+	@Override
+	public void sendEmail(SimpleMailMessage msg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

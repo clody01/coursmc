@@ -112,7 +112,7 @@ public class DBService {
 		state2.getCities().addAll(Arrays.asList(city2, city3));
 		state1.getCities().addAll(Arrays.asList(city1));
 
-		Customer customer1 = new Customer(null, "Marie Silva", "m.silva@gmail.com", CustomerType.PHYSICALPERSON,
+		Customer customer1 = new Customer(null, "Marie Silva", "mamadoumady69@gmail.com", CustomerType.PHYSICALPERSON,
 				"0646462425");
 		customer1.getTelephones().addAll(Arrays.asList("06548725", "06548729"));
 		Address address1 = new Address(null, "Rue Louis Lherault", "Argenteuil", "chez mamadou", "Val d'argenteuil",

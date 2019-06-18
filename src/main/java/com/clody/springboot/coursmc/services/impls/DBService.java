@@ -29,6 +29,7 @@ import com.clody.springboot.coursmc.models.PaymentWithTicket;
 import com.clody.springboot.coursmc.models.Product;
 import com.clody.springboot.coursmc.models.State;
 import com.clody.springboot.coursmc.models.enums.CustomerType;
+import com.clody.springboot.coursmc.models.enums.Profile;
 import com.clody.springboot.coursmc.models.enums.StatusPayment;
 
 @Service
@@ -119,19 +120,28 @@ public class DBService {
 		Customer customer1 = new Customer(null, "Marie Silva", "mamadoumady69@gmail.com", CustomerType.PHYSICALPERSON,
 				"0646462425", bCryptPasswordEncoder.encode("123"));
 		customer1.getTelephones().addAll(Arrays.asList("06548725", "06548729"));
+		
+		Customer customer2 = new Customer(null, "Ana Costa", "tseoue01@gmail.com", CustomerType.PHYSICALPERSON,
+				"25852270490", bCryptPasswordEncoder.encode("123"));
+		customer2.getTelephones().addAll(Arrays.asList("03549725", "03548722"));
+		customer2.addProfile(Profile.ADMIN);
+		
 		Address address1 = new Address(null, "Rue Louis Lherault", "Argenteuil", "chez mamadou", "Val d'argenteuil",
 				"95100", customer1, city1);
 		Address address2 = new Address(null, "Rue Louis Lherault", "Argenteuil", "chez mamadou", "Val d'argenteuil",
 				"95100", customer1, city2);
+		Address address3 = new Address(null, "Rue Jean Lherault", "Argenteuil", "chez mamadou", "Val d'argenteuil",
+				"92100", customer1, city2);
 		customer1.getAddressList().addAll(Arrays.asList(address1, address2));
+		customer2.getAddressList().addAll(Arrays.asList(address3));
 
 		categoryDao.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		productDao
 				.saveAll(Arrays.asList(prod1, prod2, prod3, prod4, prod5, prod6, prod7, prod8, prod9, prod10, prod11));
 		stateDao.saveAll(Arrays.asList(state1, state2));
 		cityDao.saveAll(Arrays.asList(city1, city2, city3));
-		customerDao.saveAll(Arrays.asList(customer1));
-		addressrDao.saveAll(Arrays.asList(address1, address2));
+		customerDao.saveAll(Arrays.asList(customer1,customer2));
+		addressrDao.saveAll(Arrays.asList(address1, address2,address3));
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		Invoice invoice1 = new Invoice(null, simpleDateFormat.parse("30/09/2017 10:32"), customer1, address1);
 		Invoice invoice2 = new Invoice(null, simpleDateFormat.parse("10/10/2017 19:35"), customer1, address2);

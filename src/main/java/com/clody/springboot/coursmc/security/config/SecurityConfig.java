@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private Environment environment;	
 	 
-	private static final String[] PUBLIC_MATCHERS_GET = { "/api/products/**", "/api/categories/**" };
+	private static final String[] PUBLIC_MATCHERS_GET = { "/api/products/**", "/api/categories/**" , "/api/customers/**"};
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {

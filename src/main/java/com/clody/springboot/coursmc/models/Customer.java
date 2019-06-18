@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.clody.springboot.coursmc.models.enums.CustomerType;
+import com.clody.springboot.coursmc.models.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -36,7 +39,11 @@ public class Customer implements Serializable {
 	
 	@JsonIgnore
 	private String password;
-
+	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name = "PROFILES")
+	private Set<Integer> profiles = new HashSet<>();
+	
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<Address> addressList = new ArrayList<>();
 
@@ -49,6 +56,7 @@ public class Customer implements Serializable {
 	private List<Invoice> invoices = new ArrayList<>();
 
 	public Customer() {
+		addProfile(Profile.CUSTOMER);
 	}
 
 	public Customer(Integer id, String name, String email, CustomerType customerType, String cpfOuCnpj, String password) {
@@ -58,6 +66,7 @@ public class Customer implements Serializable {
 		this.customerType = (customerType == null) ? null : customerType.getCode();
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.password = password;
+		addProfile(Profile.CUSTOMER);
 	}
 
 	public Integer getId() {
@@ -145,7 +154,14 @@ public class Customer implements Serializable {
 	public void setInvoices(List<Invoice> invoices) {
 		this.invoices = invoices;
 	}
-	
+	// get Customer profiles set 
+	public Set<Profile> getProfiles() {
+		return profiles.stream().map(code -> Profile.toEnum(code)).collect(Collectors.toSet());
+	}
+
+	public void  addProfile(Profile profile) {
+		profiles.add(profile.getCode());
+	}
 
 	@Override
 	public boolean equals(Object obj) {

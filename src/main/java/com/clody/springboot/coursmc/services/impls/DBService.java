@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.clody.springboot.coursmc.daos.IAddressDao;
@@ -55,6 +56,9 @@ public class DBService {
 
 	@Autowired
 	private IItemInvoiceDao itemInvoiceDao;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public void instantiateTestDatabease() throws ParseException {
 		Category cat1 = new Category(null, "Informatique");
@@ -113,7 +117,7 @@ public class DBService {
 		state1.getCities().addAll(Arrays.asList(city1));
 
 		Customer customer1 = new Customer(null, "Marie Silva", "mamadoumady69@gmail.com", CustomerType.PHYSICALPERSON,
-				"0646462425");
+				"0646462425", bCryptPasswordEncoder.encode("123"));
 		customer1.getTelephones().addAll(Arrays.asList("06548725", "06548729"));
 		Address address1 = new Address(null, "Rue Louis Lherault", "Argenteuil", "chez mamadou", "Val d'argenteuil",
 				"95100", customer1, city1);

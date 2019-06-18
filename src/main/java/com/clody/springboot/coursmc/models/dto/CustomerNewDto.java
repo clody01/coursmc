@@ -21,7 +21,7 @@ public class CustomerNewDto implements Serializable {
 	@Email(message="Invalid email!")
 	private String email;
 	
-	
+	private String password;
 	private Integer customerType;
 	@NotEmpty(message="The cpfOuCnpj is Requiered!")
 	private String cpfOuCnpj;
@@ -145,6 +145,14 @@ public class CustomerNewDto implements Serializable {
 
 	public void setCityId(Integer cityId) {
 		this.cityId = cityId;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	

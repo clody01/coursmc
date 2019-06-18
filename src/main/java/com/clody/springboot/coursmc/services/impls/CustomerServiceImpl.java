@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,8 @@ public class CustomerServiceImpl implements ICustomerService {
 	private ICityDao cityDao;
 	@Autowired
 	private IAddressDao addressDao;
-
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Override
 	@Transactional(readOnly = true)
 	public Customer findById(Integer id) {
@@ -90,13 +92,13 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public Customer fromDto(CustomerDto customerDto) {
-		return new Customer(customerDto.getId(), customerDto.getName(), customerDto.getEmail(), null, null);
+		return new Customer(customerDto.getId(), customerDto.getName(), customerDto.getEmail(), null, null, null);
 	}
 
 	@Override
 	public Customer fromNewDto(CustomerNewDto customerNewDto) {
 		Customer customer = new Customer(null, customerNewDto.getName(), customerNewDto.getEmail(),
-				CustomerType.toEnum(customerNewDto.getCustomerType()), customerNewDto.getCpfOuCnpj());
+				CustomerType.toEnum(customerNewDto.getCustomerType()), customerNewDto.getCpfOuCnpj(), bCryptPasswordEncoder.encode(customerNewDto.getPassword()));
 		City city = cityDao.findById(customerNewDto.getCityId()).orElse(null);
 		Address address = new Address(null, customerNewDto.getPublicPlace(), customerNewDto.getNumber(),
 				customerNewDto.getComplement(), customerNewDto.getNeighborhood(), customerNewDto.getZipCode(), customer,

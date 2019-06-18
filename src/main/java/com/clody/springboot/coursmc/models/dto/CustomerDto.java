@@ -21,7 +21,8 @@ public class CustomerDto implements Serializable {
 	@NotEmpty(message="The Email is Requiered!")
 	@Email(message="Invalid email!")
 	private String email;
-
+	private String password;
+	
 	public CustomerDto() {
 
 	}
@@ -54,6 +55,14 @@ public class CustomerDto implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

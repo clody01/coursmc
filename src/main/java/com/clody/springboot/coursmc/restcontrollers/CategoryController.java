@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,39 +54,44 @@ public class CategoryController {
 	@GetMapping("/categories")
 	public ResponseEntity<List<CategoryDto>> findAll() {
 		List<Category> categories = categoryService.findAll();
-		List<CategoryDto> categoriesDto = categories.stream()
-				.map(category -> new CategoryDto(category)).collect(Collectors.toList());
-		return  ResponseEntity.ok().body(categoriesDto);
+		List<CategoryDto> categoriesDto = categories.stream().map(category -> new CategoryDto(category))
+				.collect(Collectors.toList());
+		return ResponseEntity.ok().body(categoriesDto);
 	}
 
 	@GetMapping("/categories/pages")
-	public ResponseEntity<Page<CategoryDto>> findPage(
-		@RequestParam(value="page", defaultValue = "0")Integer page, 
-		@RequestParam(value="linesPerPage", defaultValue = "24")Integer linesPerPage, 
-		@RequestParam(value="derection", defaultValue = "ASC")String derection, 
-		@RequestParam(value="orderBy", defaultValue = "name")String orderBy) {
-		Page<Category> categories = categoryService.findPage(page,linesPerPage,derection,orderBy);
+	public ResponseEntity<Page<CategoryDto>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "derection", defaultValue = "ASC") String derection,
+			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy) {
+		Page<Category> categories = categoryService.findPage(page, linesPerPage, derection, orderBy);
 		Page<CategoryDto> categoriesDto = categories.map(category -> new CategoryDto(category));
-		return  ResponseEntity.ok().body(categoriesDto);
+		return ResponseEntity.ok().body(categoriesDto);
 	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping("/categories")
-	public ResponseEntity<Void> insert(@Valid @RequestBody CategoryDto categoryDto) {		
-		Category category = categoryService.insert(categoryService.fromDto(categoryDto));		
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoryDto categoryDto) {
+		Category category = categoryService.insert(categoryService.fromDto(categoryDto));
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
 
 	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/categories/{id}")
-	public ResponseEntity<Void> update(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer id) {		
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer id) {
 		Category category = categoryService.fromDto(categoryDto);
 		category.setId(id);
-		category = categoryService.update(category);			 
+		category = categoryService.update(category);
 		return ResponseEntity.noContent().build();
 	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/categories/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Integer id) {		
-		categoryService.delete(id);			 
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		categoryService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 }

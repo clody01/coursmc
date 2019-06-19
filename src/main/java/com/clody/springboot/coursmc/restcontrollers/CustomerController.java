@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,7 @@ public class CustomerController {
 		
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/customers")
 	public ResponseEntity<List<CustomerDto>> findAll() {
 		List<Customer> customers = customerService.findAll();
@@ -58,7 +60,8 @@ public class CustomerController {
 				.map(customer -> new CustomerDto(customer)).collect(Collectors.toList());
 		return  ResponseEntity.ok().body(customersDto);
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/customers/pages")
 	public ResponseEntity<Page<CustomerDto>> findPage(
 		@RequestParam(value="page", defaultValue = "0")Integer page, 
@@ -94,6 +97,7 @@ public class CustomerController {
 		customer = customerService.update(customer);			 
 		return ResponseEntity.noContent().build();
 	}
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/customers/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {		
 		customerService.delete(id);			 

@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.clody.springboot.coursmc.security.JWTUtil;
 import com.clody.springboot.coursmc.security.filters.JWTAuthenticationFilter;
+import com.clody.springboot.coursmc.security.filters.JWTAuthorizationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -43,7 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.cors().and().csrf().disable();
 		httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll().anyRequest()
 				.authenticated();
-		httpSecurity.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		httpSecurity.addFilter(new JWTAuthenticationFilter(authenticationManager(),jwtUtil));
+		httpSecurity.addFilter(new JWTAuthorizationFilter(authenticationManager(),jwtUtil,userDetailsService));
 		httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 

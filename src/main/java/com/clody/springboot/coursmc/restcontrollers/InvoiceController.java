@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +16,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.clody.springboot.coursmc.models.Category;
 import com.clody.springboot.coursmc.models.Invoice;
+import com.clody.springboot.coursmc.models.dto.CategoryDto;
 import com.clody.springboot.coursmc.services.IInvoiceService;
 
 @RestController
@@ -48,5 +52,13 @@ public class InvoiceController {
 				.toUri();
 		return ResponseEntity.created(uri).build();
 
+	}
+	@GetMapping("/invoices")
+	public ResponseEntity<Page<Invoice>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "derection", defaultValue = "DESC") String derection,
+			@RequestParam(value = "orderBy", defaultValue = "instant") String orderBy) {
+		Page<Invoice> invoices = invoiceService.findPage(page, linesPerPage, derection, orderBy);
+		return ResponseEntity.ok().body(invoices);
 	}
 }

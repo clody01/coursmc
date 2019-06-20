@@ -20,6 +20,10 @@ import com.clody.springboot.coursmc.models.Customer;
 import com.clody.springboot.coursmc.models.dto.CustomerDto;
 import com.clody.springboot.coursmc.models.dto.CustomerNewDto;
 import com.clody.springboot.coursmc.models.enums.CustomerType;
+import com.clody.springboot.coursmc.models.enums.Profile;
+import com.clody.springboot.coursmc.security.UserSS;
+import com.clody.springboot.coursmc.security.exceptions.AuthorizationException;
+import com.clody.springboot.coursmc.security.services.UserService;
 import com.clody.springboot.coursmc.services.ICustomerService;
 import com.clody.springboot.coursmc.services.excepetions.DataIntegrityException;
 import com.clody.springboot.coursmc.services.excepetions.ObjectNotFoundException;
@@ -34,9 +38,16 @@ public class CustomerServiceImpl implements ICustomerService {
 	private IAddressDao addressDao;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	@Override
 	@Transactional(readOnly = true)
 	public Customer findById(Integer id) {
+		// Security
+		UserSS userSS = UserService.authenticated();
+		if (userSS == null|| !userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId())) {
+			throw new AuthorizationException("access denied");
+		}
+		
 		Customer customer = customerDao.findById(id).orElse(null);
 		if (customer == null) {
 			throw new ObjectNotFoundException("Object with ID = " + id.toString() + " Of Type "

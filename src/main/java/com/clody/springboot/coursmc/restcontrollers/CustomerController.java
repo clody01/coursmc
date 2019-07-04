@@ -1,9 +1,14 @@
 package com.clody.springboot.coursmc.restcontrollers;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -23,12 +28,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.clody.springboot.coursmc.models.Customer;
 import com.clody.springboot.coursmc.models.dto.CustomerDto;
 import com.clody.springboot.coursmc.models.dto.CustomerNewDto;
 import com.clody.springboot.coursmc.services.ICustomerService;
+import com.clody.springboot.coursmc.uploadandload.services.IUploadFileService;
 
 @RestController
 @RequestMapping("/api")
@@ -36,6 +43,9 @@ public class CustomerController {
 	
 	@Autowired
 	private ICustomerService customerService; 
+
+	@Autowired
+	private IUploadFileService uploadFileService;
 	
 	@GetMapping("/customers/{id}")
 	public ResponseEntity<?> find(@PathVariable Integer id) {
@@ -103,5 +113,28 @@ public class CustomerController {
 		customerService.delete(id);			 
 		return ResponseEntity.noContent().build();
 	}
+	@PostMapping("/customers/uploads")
+	public ResponseEntity<?> uploads(@RequestParam("file") MultipartFile file) {
+		Map<String, Object> response = new HashMap<>();
+		
+		if (!file.isEmpty()) {
+		//	String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
+		//	Path filePath = Paths.get("uploads").resolve(fileName).toAbsolutePath();
+		//	LOG.info(filePath.toString());
+
+			try {
+				uploadFileService.copyFile(file);
+				// Files.copy(file.getInputStream(), filePath);
+			} catch (IOException e) {
+				// response.put("Message", "Error: Can not upload the file: " + fileName);
+				response.put("Error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		 
+		}
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+
 	
 }

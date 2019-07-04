@@ -18,6 +18,7 @@ public class CustomerDto implements Serializable {
 	@NotEmpty(message="Customer'sname is Requiered!")
 	@Length(min=5, max=120, message="the name must have 5 characters minimum and 120 characters maxi")
 	private String name;
+	
 	@NotEmpty(message="The Email is Requiered!")
 	@Email(message="Invalid email!")
 	private String email;

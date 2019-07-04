@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.clody.springboot.coursmc.models.Category;
 import com.clody.springboot.coursmc.models.Invoice;
-import com.clody.springboot.coursmc.models.dto.CategoryDto;
 import com.clody.springboot.coursmc.services.IInvoiceService;
 
 @RestController

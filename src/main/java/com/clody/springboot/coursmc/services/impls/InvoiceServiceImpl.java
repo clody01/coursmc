@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clody.springboot.coursmc.daos.IInvoiceDao;
 import com.clody.springboot.coursmc.daos.IItemInvoiceDao;
 import com.clody.springboot.coursmc.daos.IPaymentDao;
-import com.clody.springboot.coursmc.daos.IProductDao;
 import com.clody.springboot.coursmc.mail.service.EmailService;
 import com.clody.springboot.coursmc.models.Category;
 import com.clody.springboot.coursmc.models.Customer;
@@ -36,9 +35,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 	@Autowired
 	private IPaymentDao paymentDao;
 	@Autowired
-	private IProductService productService;
-	@Autowired
-	private IProductDao productDao;
+	private IProductService productService; 
 
 	@Autowired
 	private IItemInvoiceDao itemInvoiceDao;
@@ -47,8 +44,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 	private ICustomerService customerService;
 	@Autowired
 	private TicketPaymentService ticketPaymentService;
-	@Autowired
-	private CardPaymentService cardPaymentService;
+	 
 
 	@Autowired
 	private EmailService emailService;

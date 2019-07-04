@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.clody.springboot.coursmc.security.exceptions.AuthorizationException;
 import com.clody.springboot.coursmc.services.excepetions.DataIntegrityException;
 import com.clody.springboot.coursmc.services.excepetions.ObjectNotFoundException;
+import com.clody.springboot.coursmc.uploadandload.services.exceptions.FileException;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -42,5 +43,10 @@ public class ControllerExceptionHandler {
 	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
 		StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
+	}
+	@ExceptionHandler(FileException.class)
+	public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request) {
+		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 }

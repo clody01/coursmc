@@ -2,13 +2,9 @@ package com.clody.springboot.coursmc.restcontrollers;
 
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -36,17 +32,18 @@ import com.clody.springboot.coursmc.models.dto.CustomerDto;
 import com.clody.springboot.coursmc.models.dto.CustomerNewDto;
 import com.clody.springboot.coursmc.services.ICustomerService;
 import com.clody.springboot.coursmc.uploadandload.services.IUploadFileService;
+import com.clody.springboot.coursmc.uploadandload.services.exceptions.FileException;
 
 @RestController
 @RequestMapping("/api")
 public class CustomerController {
-	
+
 	@Autowired
-	private ICustomerService customerService; 
+	private ICustomerService customerService;
 
 	@Autowired
 	private IUploadFileService uploadFileService;
-	
+
 	@GetMapping("/customers/{id}")
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Map<String, Object> response = new HashMap<>();
@@ -59,28 +56,27 @@ public class CustomerController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
-		
+
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/customers")
 	public ResponseEntity<List<CustomerDto>> findAll() {
 		List<Customer> customers = customerService.findAll();
-		List<CustomerDto> customersDto = customers.stream()
-				.map(customer -> new CustomerDto(customer)).collect(Collectors.toList());
-		return  ResponseEntity.ok().body(customersDto);
+		List<CustomerDto> customersDto = customers.stream().map(customer -> new CustomerDto(customer))
+				.collect(Collectors.toList());
+		return ResponseEntity.ok().body(customersDto);
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/customers/pages")
-	public ResponseEntity<Page<CustomerDto>> findPage(
-		@RequestParam(value="page", defaultValue = "0")Integer page, 
-		@RequestParam(value="linesPerPage", defaultValue = "24")Integer linesPerPage, 
-		@RequestParam(value="derection", defaultValue = "ASC")String derection, 
-		@RequestParam(value="orderBy", defaultValue = "name")String orderBy) {
-		Page<Customer> customers = customerService.findPage(page,linesPerPage,derection,orderBy);
+	public ResponseEntity<Page<CustomerDto>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "derection", defaultValue = "ASC") String derection,
+			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy) {
+		Page<Customer> customers = customerService.findPage(page, linesPerPage, derection, orderBy);
 		Page<CustomerDto> customersDto = customers.map(customer -> new CustomerDto(customer));
-		return  ResponseEntity.ok().body(customersDto);
+		return ResponseEntity.ok().body(customersDto);
 	}
 
 	/*
@@ -93,34 +89,34 @@ public class CustomerController {
 	 * }
 	 */
 	@PostMapping("/customers")
-	public ResponseEntity<Void> insert(@Valid @RequestBody CustomerNewDto customerNewDto) {		
-		Customer customer = customerService.insert(customerService.fromNewDto(customerNewDto));		
+	public ResponseEntity<Void> insert(@Valid @RequestBody CustomerNewDto customerNewDto) {
+		Customer customer = customerService.insert(customerService.fromNewDto(customerNewDto));
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(customer.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
 
 	}
+
 	@PutMapping("/customers/{id}")
-	public ResponseEntity<Void> update(@Valid @RequestBody CustomerDto customerDto, @PathVariable Integer id) {		
+	public ResponseEntity<Void> update(@Valid @RequestBody CustomerDto customerDto, @PathVariable Integer id) {
 		Customer customer = customerService.fromDto(customerDto);
 		customer.setId(id);
-		customer = customerService.update(customer);			 
+		customer = customerService.update(customer);
 		return ResponseEntity.noContent().build();
 	}
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/customers/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Integer id) {		
-		customerService.delete(id);			 
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		customerService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+
 	@PostMapping("/customers/uploads")
 	public ResponseEntity<?> uploads(@RequestParam("file") MultipartFile file) {
 		Map<String, Object> response = new HashMap<>();
-		
+
 		if (!file.isEmpty()) {
-		//	String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
-		//	Path filePath = Paths.get("uploads").resolve(fileName).toAbsolutePath();
-		//	LOG.info(filePath.toString());
 
 			try {
 				uploadFileService.copyFile(file);
@@ -128,13 +124,13 @@ public class CustomerController {
 			} catch (IOException e) {
 				// response.put("Message", "Error: Can not upload the file: " + fileName);
 				response.put("Error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+				// return new ResponseEntity<Map<String, Object>>(response,
+				// HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new FileException("Error" + e.getMessage().concat(": ").concat(e.getCause().getMessage()));
 			}
 
-		 
 		}
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
-	
 }

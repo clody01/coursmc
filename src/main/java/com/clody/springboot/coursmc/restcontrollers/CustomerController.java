@@ -113,22 +113,16 @@ public class CustomerController {
 	}
 
 	@PostMapping("/customers/uploads")
-	public ResponseEntity<?> uploads(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
 		Map<String, Object> response = new HashMap<>();
 
-		if (!file.isEmpty()) {
-
-			try {
-				uploadFileService.copyFile(file);
-				// Files.copy(file.getInputStream(), filePath);
-			} catch (IOException e) {
-				// response.put("Message", "Error: Can not upload the file: " + fileName);
-				response.put("Error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
-				// return new ResponseEntity<Map<String, Object>>(response,
-				// HttpStatus.INTERNAL_SERVER_ERROR);
+		if (!file.isEmpty()) {			
+			try {		
+				customerService.uploadProfilePiture(file,id);	 
+			} catch (IOException e) {				 
+				response.put("Error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));				 
 				throw new FileException("Error" + e.getMessage().concat(": ").concat(e.getCause().getMessage()));
 			}
-
 		}
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}

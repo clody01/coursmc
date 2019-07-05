@@ -36,8 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private JWTUtil jwtUtil;
 
 	private static final String[] PUBLIC_MATCHERS_GET = {"/api/products/**", "/api/categories/**"};
-	private static final String[] PUBLIC_MATCHERS_POST = {"/api/customers","/api/customers/uploads","/auth/forgot/**"};
-
+	private static final String[] PUBLIC_MATCHERS_POST = {"/api/customers","/auth/forgot/**"};
+	
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		if (Arrays.asList(environment.getActiveProfiles()).contains("test")) {

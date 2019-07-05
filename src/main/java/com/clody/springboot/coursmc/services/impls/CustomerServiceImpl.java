@@ -1,5 +1,6 @@
 package com.clody.springboot.coursmc.services.impls;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.clody.springboot.coursmc.daos.IAddressDao;
 import com.clody.springboot.coursmc.daos.ICityDao;
@@ -27,6 +29,7 @@ import com.clody.springboot.coursmc.security.services.UserService;
 import com.clody.springboot.coursmc.services.ICustomerService;
 import com.clody.springboot.coursmc.services.excepetions.DataIntegrityException;
 import com.clody.springboot.coursmc.services.excepetions.ObjectNotFoundException;
+import com.clody.springboot.coursmc.uploadandload.services.IUploadFileService;
 
 @Service
 public class CustomerServiceImpl implements ICustomerService {
@@ -38,16 +41,18 @@ public class CustomerServiceImpl implements ICustomerService {
 	private IAddressDao addressDao;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+	@Autowired
+	private IUploadFileService uploadFileService;
+
 	@Override
 	@Transactional(readOnly = true)
 	public Customer findById(Integer id) {
 		// Security
 		UserSS userSS = UserService.authenticated();
-		if (userSS == null|| !userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId())) {
+		if (userSS == null || !userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId())) {
 			throw new AuthorizationException("access denied");
 		}
-		
+
 		Customer customer = customerDao.findById(id).orElse(null);
 		if (customer == null) {
 			throw new ObjectNotFoundException("Object with ID = " + id.toString() + " Of Type "
@@ -109,7 +114,8 @@ public class CustomerServiceImpl implements ICustomerService {
 	@Override
 	public Customer fromNewDto(CustomerNewDto customerNewDto) {
 		Customer customer = new Customer(null, customerNewDto.getName(), customerNewDto.getEmail(),
-				CustomerType.toEnum(customerNewDto.getCustomerType()), customerNewDto.getCpfOuCnpj(), bCryptPasswordEncoder.encode(customerNewDto.getPassword()));
+				CustomerType.toEnum(customerNewDto.getCustomerType()), customerNewDto.getCpfOuCnpj(),
+				bCryptPasswordEncoder.encode(customerNewDto.getPassword()));
 		City city = cityDao.findById(customerNewDto.getCityId()).orElse(null);
 		Address address = new Address(null, customerNewDto.getPublicPlace(), customerNewDto.getNumber(),
 				customerNewDto.getComplement(), customerNewDto.getNeighborhood(), customerNewDto.getZipCode(), customer,
@@ -124,4 +130,13 @@ public class CustomerServiceImpl implements ICustomerService {
 		}
 		return customer;
 	}
+
+	@Override
+	public Customer uploadProfilePiture(MultipartFile multiPartFile, Integer id) throws IOException {
+		Customer customer = findById(id);
+		String fileName = uploadFileService.copyFile(multiPartFile);
+		customer.setImageUrl(fileName);
+		return customerDao.save(customer);
+	}
+
 }

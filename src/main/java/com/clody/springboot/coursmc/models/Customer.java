@@ -40,6 +40,8 @@ public class Customer implements Serializable {
 	@JsonIgnore
 	private String password;
 	
+	private String imageUrl;
+	
 	@ElementCollection(fetch=FetchType.EAGER)
 	@CollectionTable(name = "PROFILES")
 	private Set<Integer> profiles = new HashSet<>();
@@ -68,6 +70,7 @@ public class Customer implements Serializable {
 		this.password = password;
 		addProfile(Profile.CUSTOMER);
 	}
+	
 
 	public Integer getId() {
 		return id;
@@ -133,6 +136,16 @@ public class Customer implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	/*

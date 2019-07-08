@@ -56,7 +56,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Value("${img.profile.size}")
 	private Integer size;
-	
+
 	private final Logger LOG = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
 	@Override
@@ -159,8 +159,25 @@ public class CustomerServiceImpl implements ICustomerService {
 		Customer customer = findById(id);
 		BufferedImage jpgImage = uploadFileService.getJpgImageFromFile(multiPartFile);
 		jpgImage = uploadFileService.cropSquare(jpgImage);
-		jpgImage = uploadFileService.resize(jpgImage,size);
+		jpgImage = uploadFileService.resize(jpgImage, size);
 		String fileName = prefix + customer.getId() + ".jpg";
 		uploadFileService.copyFilePlus(jpgImage, fileName, "jpg");
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Customer findByEmail(String email) {
+		// Security
+		UserSS userSS = UserService.authenticated();
+		if (userSS == null || !userSS.hasRole(Profile.ADMIN) && !email.equals(userSS.getEmail())) {
+			throw new AuthorizationException("access denied");
+		}
+
+		Customer customer = customerDao.findByEmail(email);
+		if (customer == null) {
+			throw new ObjectNotFoundException("Object with ID = " + email.toString() + " Of Type "
+					+ Customer.class.getName() + " does not exist in database!");
+		}
+		return customer;
 	}
 }

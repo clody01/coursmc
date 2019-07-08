@@ -12,6 +12,7 @@ import com.clody.springboot.coursmc.models.dto.CustomerNewDto;
 
 public interface ICustomerService {
 	Customer findById(Integer id);
+	Customer findByEmail(String email);
 	Customer insert(Customer customer);
 	Customer fromDto(CustomerDto customerDto);
 	Customer fromNewDto(CustomerNewDto customerNewDto);

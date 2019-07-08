@@ -41,9 +41,6 @@ public class CustomerController {
 	@Autowired
 	private ICustomerService customerService;
 
-	@Autowired
-	private IUploadFileService uploadFileService;
-
 	@GetMapping("/customers/{id}")
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Map<String, Object> response = new HashMap<>();
@@ -53,10 +50,23 @@ public class CustomerController {
 		} catch (DataAccessException e) {
 			response.put("message", "Base consultation error");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 
+	}
+	@GetMapping("/customers/emails")
+	public ResponseEntity<?> find(@RequestParam(value="email") String email) {
+		Map<String, Object> response = new HashMap<>();
+		Customer customer = null;
+		try {
+			customer = customerService.findByEmail(email);
+		} catch (DataAccessException e) {
+			response.put("message", "Base consultation error");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
@@ -72,7 +82,7 @@ public class CustomerController {
 	@GetMapping("/customers/pages")
 	public ResponseEntity<Page<CustomerDto>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
-			@RequestParam(value = "derection", defaultValue = "ASC") String derection,
+			@RequestParam(value = "direction", defaultValue = "ASC") String derection,
 			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy) {
 		Page<Customer> customers = customerService.findPage(page, linesPerPage, derection, orderBy);
 		Page<CustomerDto> customersDto = customers.map(customer -> new CustomerDto(customer));

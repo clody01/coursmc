@@ -161,7 +161,6 @@ public class CustomerServiceImpl implements ICustomerService {
 		jpgImage = uploadFileService.cropSquare(jpgImage);
 		jpgImage = uploadFileService.resize(jpgImage,size);
 		String fileName = prefix + customer.getId() + ".jpg";
-		uploadFileService.copyFilePlus(jpgImage, fileName, "jpg");	
-		
+		uploadFileService.copyFilePlus(jpgImage, fileName, "jpg");
 	}
 }

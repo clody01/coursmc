@@ -1,9 +1,16 @@
 package com.clody.springboot.coursmc.services.impls;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +50,14 @@ public class CustomerServiceImpl implements ICustomerService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
 	private IUploadFileService uploadFileService;
+
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
+
+	@Value("${img.profile.size}")
+	private Integer size;
+	
+	private final Logger LOG = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
 	@Override
 	@Transactional(readOnly = true)
@@ -131,12 +146,22 @@ public class CustomerServiceImpl implements ICustomerService {
 		return customer;
 	}
 
-	@Override
-	public Customer uploadProfilePiture(MultipartFile multiPartFile, Integer id) throws IOException {
+	// @Override
+	public Customer uploadProfilePiturePlus(MultipartFile multiPartFile, Integer id) throws IOException {
 		Customer customer = findById(id);
 		String fileName = uploadFileService.copyFile(multiPartFile);
-		customer.setImageUrl(fileName);
+		// customer.setImageUrl(fileName);
 		return customerDao.save(customer);
 	}
 
+	@Override
+	public void uploadProfilePiture(MultipartFile multiPartFile, Integer id) throws IOException {
+		Customer customer = findById(id);
+		BufferedImage jpgImage = uploadFileService.getJpgImageFromFile(multiPartFile);
+		jpgImage = uploadFileService.cropSquare(jpgImage);
+		jpgImage = uploadFileService.resize(jpgImage,size);
+		String fileName = prefix + customer.getId() + ".jpg";
+		uploadFileService.copyFilePlus(jpgImage, fileName, "jpg");	
+		
+	}
 }

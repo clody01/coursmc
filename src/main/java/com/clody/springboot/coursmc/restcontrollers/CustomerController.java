@@ -117,11 +117,11 @@ public class CustomerController {
 		Map<String, Object> response = new HashMap<>();
 
 		if (!file.isEmpty()) {			
-			try {		
+			try {	
 				customerService.uploadProfilePiture(file,id);	 
 			} catch (IOException e) {				 
-				response.put("Error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));				 
-				throw new FileException("Error" + e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+				// response.put("Error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));				 
+				throw new FileException("Upload Error!!!");
 			}
 		}
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);

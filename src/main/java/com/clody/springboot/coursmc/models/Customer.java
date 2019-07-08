@@ -39,8 +39,7 @@ public class Customer implements Serializable {
 	
 	@JsonIgnore
 	private String password;
-	
-	private String imageUrl;
+
 	
 	@ElementCollection(fetch=FetchType.EAGER)
 	@CollectionTable(name = "PROFILES")
@@ -139,14 +138,6 @@ public class Customer implements Serializable {
 	}
 	
 	
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
 
 	/*
 	 * public List<Invoice> getInvoices() { return invoices; } public void

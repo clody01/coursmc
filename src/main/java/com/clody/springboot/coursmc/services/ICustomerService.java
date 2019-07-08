@@ -19,5 +19,5 @@ public interface ICustomerService {
 	void delete(Integer id);
 	List<Customer> findAll();
 	Page<Customer> findPage(Integer page, Integer linesPerPage, String derection, String orderBy);
-	Customer uploadProfilePiture(MultipartFile file, Integer id) throws IOException;
+	void uploadProfilePiture(MultipartFile file, Integer id) throws IOException;
 }

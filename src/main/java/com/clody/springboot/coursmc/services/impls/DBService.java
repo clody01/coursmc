@@ -136,8 +136,7 @@ public class DBService {
 		customer2.getAddressList().addAll(Arrays.asList(address3));
 
 		categoryDao.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
-		productDao
-				.saveAll(Arrays.asList(prod1, prod2, prod3, prod4, prod5, prod6, prod7, prod8, prod9, prod10, prod11));
+		productDao.saveAll(Arrays.asList(prod1, prod2, prod3, prod4, prod5, prod6, prod7, prod8, prod9, prod10, prod11));
 		stateDao.saveAll(Arrays.asList(state1, state2));
 		cityDao.saveAll(Arrays.asList(city1, city2, city3));
 		customerDao.saveAll(Arrays.asList(customer1,customer2));
